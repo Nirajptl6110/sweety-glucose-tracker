@@ -3,6 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 
 const healthRoutes = require('./routes/health.routes');
+const authRoutes = require('./routes/auth.routes');
 const { notFoundHandler, errorHandler } = require('./middleware/error.middleware');
 
 const app = express();
@@ -12,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/health', healthRoutes);
+app.use('/api/auth', authRoutes);
 
 // Keep these after all routes so unmatched requests and errors are handled centrally.
 app.use(notFoundHandler);
