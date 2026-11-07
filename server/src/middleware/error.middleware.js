@@ -7,12 +7,17 @@ function notFoundHandler(req, res, next) {
 
 function errorHandler(error, req, res, next) {
   const status = error.status || 500;
+  const isConfigurationError = status === 500 && error.code === 'JWT_CONFIGURATION_ERROR';
 
   res.status(status).json({
     success: false,
-    message: status === 500 ? 'Internal server error.' : error.message,
+    message: isConfigurationError
+      ? 'Authentication service is not configured.'
+      : status === 500 ? 'Internal server error.' : error.message,
     error: {
-      code: status === 500 ? 'INTERNAL_SERVER_ERROR' : error.code || 'REQUEST_ERROR',
+      code: isConfigurationError
+        ? 'SERVER_CONFIGURATION_ERROR'
+        : status === 500 ? 'INTERNAL_SERVER_ERROR' : error.code || 'REQUEST_ERROR',
     },
   });
 }
